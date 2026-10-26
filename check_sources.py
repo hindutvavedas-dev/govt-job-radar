@@ -64,7 +64,7 @@ def main():
     queue.sort(key=lambda x: x.get('detected_at_utc', ''), reverse=True)
     write_json(QUEUE, queue[:2000])
     report = {'last_run_utc': run_at, 'sources_configured': len(sources), 'pages_checked': checked, 'new_candidates': added, 'errors': errors}
-    write_json(os.path.join(ROOT, 'data', 'last_run.json'), report)
+    write_json(os.path.join(ROOT, 'last_run.json'), report)
     print(json.dumps(report, indent=2))
 
 if __name__ == '__main__': main()
