@@ -1,0 +1,44 @@
+name: Daily official notice scan and deploy
+on:
+  schedule:
+    - cron: '30 2 * * *' # 08:00 India Standard Time (UTC+5:30)
+  workflow_dispatch:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+concurrency:
+  group: govt-job-radar
+  cancel-in-progress: true
+jobs:
+  scan-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install scanner requirements
+        run: pip install -r requirements.txt
+      - name: Scan official source pages
+        run: python scripts/check_sources.py
+      - name: Save new review candidates
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/review_queue.json data/last_run.json
+          git diff --cached --quiet || git commit -m "Daily official-source scan results"
+          git push
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Upload website
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - name: Publish website
+        id: deployment
+        uses: actions/deploy-pages@v4
