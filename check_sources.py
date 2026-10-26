@@ -4,9 +4,9 @@ from urllib.parse import urljoin, urlparse
 import requests
 from bs4 import BeautifulSoup
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SOURCES = os.path.join(ROOT, 'data', 'sources.json')
-QUEUE = os.path.join(ROOT, 'data', 'review_queue.json')
+ROOT = os.path.dirname(os.path.abspath(file))
+SOURCES = os.path.join(ROOT, 'sources.json')
+QUEUE = os.path.join(ROOT, 'review_queue.json')
 KEYWORDS = re.compile(r'vacan|recruit|advertisement|notification|apply online|career|job|selection post|constable|sub inspector|stenographer|assistant|technician|group [abc d]|direct recruitment|employment notice|recruitment notice|opening|opportunit', re.I)
 SKIP = re.compile(r'privacy|accessibility|contact us|tender|procurement|login|sign in|forgot password|annual report', re.I)
 HEADERS = {'User-Agent': 'GovtJobRadarBot/1.0 (public recruitment notice monitoring; polite low-frequency checks)'}
